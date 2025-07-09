@@ -9,6 +9,8 @@ class AttendancePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final name = userData['name'];
+    final phone = userData['phone'];
+    final city = userData['city'];
     final stop = userData['stop'];
     final uid = userData['uid'];
 
@@ -18,7 +20,8 @@ class AttendancePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Stop: $stop", style: TextStyle(fontSize: 20)),
+            Text("City: $city", style: TextStyle(fontSize: 18)),
+            Text("Stop: $stop", style: TextStyle(fontSize: 18)),
             SizedBox(height: 30),
             ElevatedButton(
               child: Text("Mark Attendance"),
@@ -26,6 +29,8 @@ class AttendancePage extends StatelessWidget {
                 final result = await HttpService.markAttendance(
                   uid,
                   name,
+                  phone,
+                  city,
                   stop,
                 );
                 ScaffoldMessenger.of(

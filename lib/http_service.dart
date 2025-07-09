@@ -36,10 +36,13 @@ class HttpService {
   static Future<String> markAttendance(
     String uid,
     String name,
+    String phone,
+    String city,
     String stop,
   ) async {
     final url = Uri.parse(
-      "$baseUrl?action=markAttendance&uid=$uid&name=$name&stop=$stop",
+      "$baseUrl?action=markAttendance"
+      "&uid=$uid&name=$name&phone=$phone&city=$city&stop=$stop",
     );
     final response = await http.get(url);
     return response.body;
