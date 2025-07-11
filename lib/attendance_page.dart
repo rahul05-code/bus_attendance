@@ -16,9 +16,7 @@ class AttendancePage extends StatelessWidget {
       userData['stop'],
     );
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(result)),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
   }
 
   @override
@@ -29,7 +27,9 @@ class AttendancePage extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Card(
           elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -66,12 +66,7 @@ class AttendancePage extends StatelessWidget {
             "$label: ",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
-          Expanded(
-            child: Text(
-              value,
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
+          Expanded(child: Text(value, style: TextStyle(fontSize: 16))),
         ],
       ),
     );

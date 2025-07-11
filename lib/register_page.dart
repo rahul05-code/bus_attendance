@@ -111,10 +111,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 },
                 decoration: InputDecoration(labelText: "City"),
                 items: cities
-                    .map((city) => DropdownMenuItem(
-                          value: city,
-                          child: Text(city),
-                        ))
+                    .map(
+                      (city) =>
+                          DropdownMenuItem(value: city, child: Text(city)),
+                    )
                     .toList(),
               ),
               DropdownButtonFormField<String>(
@@ -126,10 +126,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 },
                 decoration: InputDecoration(labelText: "Bus"),
                 items: buses
-                    .map((bus) => DropdownMenuItem(
-                          value: bus,
-                          child: Text(bus),
-                        ))
+                    .map(
+                      (bus) => DropdownMenuItem(value: bus, child: Text(bus)),
+                    )
                     .toList(),
               ),
               TextField(
