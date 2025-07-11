@@ -1,46 +1,39 @@
 import 'package:flutter/material.dart';
 import 'http_service.dart';
 
-class AdminPage extends StatefulWidget {
+class AdminUserListPage extends StatefulWidget {
   @override
-  _AdminPageState createState() => _AdminPageState();
+  _AdminUserListPageState createState() => _AdminUserListPageState();
 }
 
-class _AdminPageState extends State<AdminPage> {
-  List<Map<String, dynamic>> attendanceList = [];
-  bool isLoading = true;
+class _AdminUserListPageState extends State<AdminUserListPage> {
+  List<Map<String, dynamic>> users = [];
 
   @override
   void initState() {
     super.initState();
-    fetchAttendance();
+    fetchUsers();
   }
 
-  void fetchAttendance() async {
-    final result = await HttpService.getDailyAttendance();
-    setState(() {
-      attendanceList = result;
-      isLoading = false;
-    });
+  void fetchUsers() async {
+    final data = await HttpService.getAllUsers();
+    setState(() => users = data);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Today's Attendance")),
-      body: isLoading
+      appBar: AppBar(title: Text("Registered Users")),
+      body: users.isEmpty
           ? Center(child: CircularProgressIndicator())
-          : attendanceList.isEmpty
-          ? Center(child: Text("No attendance yet today."))
           : ListView.builder(
-              itemCount: attendanceList.length,
+              itemCount: users.length,
               itemBuilder: (context, index) {
-                final entry = attendanceList[index];
+                final user = users[index];
                 return ListTile(
-                  title: Text(entry['name']),
-                  subtitle: Text(
-                    "Stop: ${entry['stop']} — Time: ${entry['time']}",
-                  ),
+                  title: Text(user['name']),
+                  subtitle: Text("${user['city']} • ${user['phone']}"),
+                  trailing: Text(user['stop']),
                 );
               },
             ),

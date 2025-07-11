@@ -6,40 +6,73 @@ class AttendancePage extends StatelessWidget {
 
   AttendancePage({required this.userData});
 
+  void markAttendance(BuildContext context) async {
+    final result = await HttpService.markAttendance(
+      userData['uid'],
+      userData['name'],
+      userData['phone'],
+      userData['city'],
+      userData['bus'],
+      userData['stop'],
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(result)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final name = userData['name'];
-    final phone = userData['phone'];
-    final city = userData['city'];
-    final stop = userData['stop'];
-    final uid = userData['uid'];
-
     return Scaffold(
-      appBar: AppBar(title: Text("Welcome, $name")),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("City: $city", style: TextStyle(fontSize: 18)),
-            Text("Stop: $stop", style: TextStyle(fontSize: 18)),
-            SizedBox(height: 30),
-            ElevatedButton(
-              child: Text("Mark Attendance"),
-              onPressed: () async {
-                final result = await HttpService.markAttendance(
-                  uid,
-                  name,
-                  phone,
-                  city,
-                  stop,
-                );
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(result)));
-              },
+      appBar: AppBar(title: Text("Attendance")),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                infoRow("Name", userData['name']),
+                infoRow("Phone", userData['phone']),
+                infoRow("City", userData['city']),
+                infoRow("Bus", userData['bus']),
+                infoRow("Stop", userData['stop']),
+                SizedBox(height: 30),
+                ElevatedButton.icon(
+                  icon: Icon(Icons.check),
+                  label: Text("Mark Attendance"),
+                  onPressed: () => markAttendance(context),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget infoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          Text(
+            "$label: ",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+        ],
       ),
     );
   }

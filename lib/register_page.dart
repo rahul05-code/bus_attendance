@@ -8,20 +8,31 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final firstNameController = TextEditingController();
+  final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final stopController = TextEditingController();
   final passwordController = TextEditingController();
 
   String generatedUid = "";
   String selectedCity = "Rajkot";
+  String selectedBus = "Morbi (Big)";
 
   final List<String> cities = [
     "Rajkot",
     "Morbi",
+    "Tankara",
+    "Jasdan",
     "Wankaner",
     "Gondal",
-    "Tankara",
+  ];
+
+  final List<String> buses = [
+    "Morbi (Big)",
+    "Morbi (Small)",
+    "Rajkot",
+    "Gondal (Big)",
+    "Gondal (Small)",
+    "Wankaner",
     "Jasdan",
   ];
 
@@ -33,14 +44,14 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void register() async {
-    String firstName = firstNameController.text.trim();
+    String name = nameController.text.trim();
     String phone = phoneController.text.trim();
     String stop = stopController.text.trim();
     String password = passwordController.text.trim();
 
-    if (firstName.length < 3) {
+    if (name.length < 3) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("First name must be at least 3 characters")),
+        SnackBar(content: Text("Name must be at least 3 characters")),
       );
       return;
     }
@@ -52,15 +63,16 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    String uid = generateUid(firstName);
+    String uid = generateUid(name);
     setState(() {
       generatedUid = uid;
     });
 
     final result = await HttpService.registerUser(
-      firstName,
+      name,
       phone,
       selectedCity,
+      selectedBus,
       stop,
       password,
       uid,
@@ -82,12 +94,12 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             children: [
               TextField(
-                controller: firstNameController,
-                decoration: InputDecoration(labelText: "First Name"),
+                controller: nameController,
+                decoration: InputDecoration(labelText: "Name"),
               ),
               TextField(
                 controller: phoneController,
-                decoration: InputDecoration(labelText: "Phone Number"),
+                decoration: InputDecoration(labelText: "Mobile No"),
                 keyboardType: TextInputType.phone,
               ),
               DropdownButtonFormField<String>(
@@ -99,17 +111,30 @@ class _RegisterPageState extends State<RegisterPage> {
                 },
                 decoration: InputDecoration(labelText: "City"),
                 items: cities
-                    .map(
-                      (city) => DropdownMenuItem<String>(
-                        value: city,
-                        child: Text(city),
-                      ),
-                    )
+                    .map((city) => DropdownMenuItem(
+                          value: city,
+                          child: Text(city),
+                        ))
+                    .toList(),
+              ),
+              DropdownButtonFormField<String>(
+                value: selectedBus,
+                onChanged: (value) {
+                  setState(() {
+                    selectedBus = value!;
+                  });
+                },
+                decoration: InputDecoration(labelText: "Bus"),
+                items: buses
+                    .map((bus) => DropdownMenuItem(
+                          value: bus,
+                          child: Text(bus),
+                        ))
                     .toList(),
               ),
               TextField(
                 controller: stopController,
-                decoration: InputDecoration(labelText: "Stop"),
+                decoration: InputDecoration(labelText: "Bus Stop"),
               ),
               TextField(
                 controller: passwordController,
