@@ -15,10 +15,17 @@ class _LoginPageState extends State<LoginPage> {
     final phone = phoneController.text.trim();
     final password = passwordController.text.trim();
 
-    if (phone.isEmpty || password.isEmpty) {
+    if (phone.length != 10 || !RegExp(r'^[0-9]+$').hasMatch(phone)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Please enter phone and password")),
+        SnackBar(content: Text("Enter a valid 10-digit phone number")),
       );
+      return;
+    }
+
+    if (password.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Password cannot be empty")));
       return;
     }
 
@@ -30,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Login failed. Please try again.")),
+        SnackBar(content: Text("Login failed. Please check your credentials.")),
       );
     }
   }
@@ -45,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             TextField(
               controller: phoneController,
-              decoration: InputDecoration(labelText: "Phone"),
+              decoration: InputDecoration(labelText: "Phone Number"),
               keyboardType: TextInputType.phone,
             ),
             TextField(

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class HttpService {
-  // Replace with your actual deployed script URLs
+  // Replace these URLs with your actual deployed script links
   static const String userSheetUrl =
       "https://script.google.com/macros/s/AKfycbytkHiI4Pp7AQsHHcTnRk9Gf1rJFpaYyJbCyslHlOU9Ih2cq11XJWPZ9yDwvzI0rI6kNA/exec";
   static const String attendanceSheetUrl =
@@ -17,10 +17,15 @@ class HttpService {
     String bus,
     String stop,
     String password,
-    String uid,
   ) async {
     final url = Uri.parse(
-      "$userSheetUrl?action=register&name=$name&phone=$phone&city=$city&bus=$bus&stop=$stop&password=$password&uid=$uid",
+      "$userSheetUrl?action=register"
+      "&name=${Uri.encodeComponent(name)}"
+      "&phone=$phone"
+      "&city=${Uri.encodeComponent(city)}"
+      "&bus=${Uri.encodeComponent(bus)}"
+      "&stop=${Uri.encodeComponent(stop)}"
+      "&password=${Uri.encodeComponent(password)}",
     );
     final response = await http.get(url);
     return response.body;
@@ -31,7 +36,7 @@ class HttpService {
     String password,
   ) async {
     final url = Uri.parse(
-      "$userSheetUrl?action=login&phone=$phone&password=$password",
+      "$userSheetUrl?action=login&phone=$phone&password=${Uri.encodeComponent(password)}",
     );
     final response = await http.get(url);
     final data = jsonDecode(response.body);
@@ -42,7 +47,6 @@ class HttpService {
   // ---------------------- ATTENDANCE ----------------------
 
   static Future<String> markAttendance(
-    String uid,
     String name,
     String phone,
     String city,
@@ -51,7 +55,11 @@ class HttpService {
   ) async {
     final url = Uri.parse(
       "$attendanceSheetUrl?action=markAttendance"
-      "&uid=$uid&name=$name&phone=$phone&city=$city&bus=$bus&stop=$stop",
+      "&name=${Uri.encodeComponent(name)}"
+      "&phone=$phone"
+      "&city=${Uri.encodeComponent(city)}"
+      "&bus=${Uri.encodeComponent(bus)}"
+      "&stop=${Uri.encodeComponent(stop)}",
     );
     final response = await http.get(url);
     return response.body;
@@ -84,5 +92,12 @@ class HttpService {
     return data
         .map<Map<String, dynamic>>((e) => Map<String, dynamic>.from(e))
         .toList();
+  }
+
+  static Future<List<Map<String, dynamic>>> getAttendanceByDate(String date) async {
+    final url = Uri.parse("$attendanceSheetUrl?action=getAttendanceByDate&date=$date");
+    final response = await http.get(url);
+    final List data = jsonDecode(response.body);
+    return data.map<Map<String, dynamic>>((e) => Map<String, dynamic>.from(e)).toList();
   }
 }

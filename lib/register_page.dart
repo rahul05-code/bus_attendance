@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'http_service.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -13,7 +12,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final stopController = TextEditingController();
   final passwordController = TextEditingController();
 
-  String generatedUid = "";
   String selectedCity = "Rajkot";
   String selectedBus = "Morbi (Big)";
 
@@ -36,13 +34,6 @@ class _RegisterPageState extends State<RegisterPage> {
     "Jasdan",
   ];
 
-  String generateUid(String name) {
-    final random = Random();
-    String prefix = name.toLowerCase().replaceAll(' ', '').substring(0, 3);
-    String number = (1000 + random.nextInt(9000)).toString();
-    return prefix + number;
-  }
-
   void register() async {
     String name = nameController.text.trim();
     String phone = phoneController.text.trim();
@@ -56,17 +47,19 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
+    if (phone.length != 10 || !RegExp(r'^[0-9]+$').hasMatch(phone)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Enter valid 10-digit mobile number")),
+      );
+      return;
+    }
+
     if (password.length < 4) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Password must be at least 4 characters")),
       );
       return;
     }
-
-    String uid = generateUid(name);
-    setState(() {
-      generatedUid = uid;
-    });
 
     final result = await HttpService.registerUser(
       name,
@@ -75,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
       selectedBus,
       stop,
       password,
-      uid,
+      phone, // phone as UID
     );
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
@@ -142,14 +135,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               SizedBox(height: 20),
               ElevatedButton(child: Text("Register"), onPressed: register),
-              if (generatedUid.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Text(
-                    "Generated UID: $generatedUid",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                ),
             ],
           ),
         ),
