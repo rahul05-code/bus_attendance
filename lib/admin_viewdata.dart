@@ -3,7 +3,8 @@ import 'firebase_service.dart';
 
 class AdminViewdata extends StatefulWidget {
   @override
-  _AdminAttendanceReportPageState createState() => _AdminAttendanceReportPageState();
+  _AdminAttendanceReportPageState createState() =>
+      _AdminAttendanceReportPageState();
 }
 
 class _AdminAttendanceReportPageState extends State<AdminViewdata> {
@@ -42,7 +43,7 @@ class _AdminAttendanceReportPageState extends State<AdminViewdata> {
       appBar: AppBar(
         title: Text("Attendance Report"),
         actions: [
-          IconButton(onPressed: _pickDate, icon: Icon(Icons.calendar_today))
+          IconButton(onPressed: _pickDate, icon: Icon(Icons.calendar_today)),
         ],
       ),
       body: records.isEmpty

@@ -30,7 +30,9 @@ class FirebaseService {
 
   // Login user
   static Future<Map<String, dynamic>?> loginUser(
-      String phone, String password) async {
+    String phone,
+    String password,
+  ) async {
     final doc = await _db.collection('users').doc(phone).get();
     if (doc.exists && doc['password'] == password) {
       return doc.data()!;
@@ -48,7 +50,7 @@ class FirebaseService {
       'bus': userData['bus'],
       'stop': userData['stop'],
       'timestamp': now,
-      'date': "${now.year}-${now.month}-${now.day}"
+      'date': "${now.year}-${now.month}-${now.day}",
     });
     return "Attendance marked successfully";
   }
@@ -72,14 +74,17 @@ class FirebaseService {
   }
 
   // Admin: Get all attendance
-  static Future<List<Map<String, dynamic>>> getAllAttendance(DateTime selectedDate) async {
+  static Future<List<Map<String, dynamic>>> getAllAttendance(
+    DateTime selectedDate,
+  ) async {
     final snapshot = await _db.collection('attendance').get();
     return snapshot.docs.map((e) => e.data()).toList();
   }
 
   // Get attendance by date
   static Future<List<Map<String, dynamic>>> getAttendanceByDate(
-      String date) async {
+    String date,
+  ) async {
     final snapshot = await _db
         .collection('attendance')
         .where('date', isEqualTo: date)
