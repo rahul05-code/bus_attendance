@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'register_page.dart';
 import 'login_page.dart';
 import 'attendance_page.dart';
-//import 'admin_page.dart';
+import 'admin_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
