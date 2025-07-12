@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'attendance_page.dart';
-import 'http_service.dart';
+import 'firebase_service.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    final user = await HttpService.loginUser(phone, password);
+    final user = await FirebaseService.loginUser(phone, password);
     if (user != null) {
       Navigator.pushReplacement(
         context,

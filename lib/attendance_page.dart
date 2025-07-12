@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'http_service.dart';
+import 'firebase_service.dart';
 
 class AttendancePage extends StatelessWidget {
   final Map<String, dynamic> userData;
@@ -7,14 +7,7 @@ class AttendancePage extends StatelessWidget {
   AttendancePage({required this.userData});
 
   void markAttendance(BuildContext context) async {
-    final result = await HttpService.markAttendance(
-      userData['uid'],
-      userData['name'],
-      userData['phone'],
-      userData['city'],
-      userData['bus'],
-      userData['stop'],
-    );
+    final result = await FirebaseService.markAttendance(userData);
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
   }

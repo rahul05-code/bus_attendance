@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "951399285957",
+    "project_id": "rahul-d8f45",
+    "storage_bucket": "rahul-d8f45.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951399285957:android:be655af492aa98b7175cac",
+        "android_client_info": {
+          "package_name": "bus.system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBc6FoMn6a5nv2kgXygl9RmCr_9NF636qY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

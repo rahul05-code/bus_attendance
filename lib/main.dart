@@ -1,10 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'register_page.dart';
 import 'login_page.dart';
 import 'attendance_page.dart';
 //import 'admin_page.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(); // Initialize Firebase if needed
   runApp(BusAttendanceApp());
 }
 

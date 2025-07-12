@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'http_service.dart';
+import 'firebase_service.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -40,41 +40,31 @@ class _RegisterPageState extends State<RegisterPage> {
     String stop = stopController.text.trim();
     String password = passwordController.text.trim();
 
-    if (name.length < 3) {
+    if (name.length < 3 ||
+        phone.length != 10 ||
+        stop.isEmpty ||
+        password.length < 4) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Name must be at least 3 characters")),
+        SnackBar(content: Text("Please fill all fields correctly")),
       );
       return;
     }
 
-    if (phone.length != 10 || !RegExp(r'^[0-9]+$').hasMatch(phone)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Enter valid 10-digit mobile number")),
-      );
-      return;
-    }
-
-    if (password.length < 4) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Password must be at least 4 characters")),
-      );
-      return;
-    }
-
-    final result = await HttpService.registerUser(
-      name,
-      phone,
-      selectedCity,
-      selectedBus,
-      stop,
-      password,
-      phone, // phone as UID
+    final result = await FirebaseService.registerUser(
+      name: name,
+      phone: phone,
+      city: selectedCity,
+      bus: selectedBus,
+      stop: stop,
+      password: password,
     );
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
 
-    await Future.delayed(Duration(seconds: 2));
-    Navigator.pushReplacementNamed(context, '/');
+    if (result.toLowerCase().contains("success")) {
+      await Future.delayed(Duration(seconds: 2));
+      Navigator.pushReplacementNamed(context, '/');
+    }
   }
 
   @override
@@ -97,11 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               DropdownButtonFormField<String>(
                 value: selectedCity,
-                onChanged: (value) {
-                  setState(() {
-                    selectedCity = value!;
-                  });
-                },
+                onChanged: (value) => setState(() => selectedCity = value!),
                 decoration: InputDecoration(labelText: "City"),
                 items: cities
                     .map(
@@ -112,11 +98,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               DropdownButtonFormField<String>(
                 value: selectedBus,
-                onChanged: (value) {
-                  setState(() {
-                    selectedBus = value!;
-                  });
-                },
+                onChanged: (value) => setState(() => selectedBus = value!),
                 decoration: InputDecoration(labelText: "Bus"),
                 items: buses
                     .map(

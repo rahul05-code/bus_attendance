@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'http_service.dart';
+import 'firebase_service.dart';
 
 class AdminUserListPage extends StatefulWidget {
   @override
@@ -16,7 +16,7 @@ class _AdminUserListPageState extends State<AdminUserListPage> {
   }
 
   void fetchUsers() async {
-    final data = await HttpService.getAllUsers();
+    final data = await FirebaseService.getAllUsers();
     setState(() => users = data);
   }
 

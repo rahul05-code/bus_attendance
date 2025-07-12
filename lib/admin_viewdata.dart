@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'http_service.dart';
+import 'firebase_service.dart';
 
 class AdminViewdata extends StatefulWidget {
   @override
@@ -17,7 +17,7 @@ class _AdminAttendanceReportPageState extends State<AdminViewdata> {
   }
 
   void fetchAttendance() async {
-    final data = await HttpService.getAllAttendance(selectedDate);
+    final data = await FirebaseService.getAllAttendance(selectedDate);
     setState(() => records = data);
   }
 
